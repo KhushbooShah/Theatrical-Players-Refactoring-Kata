@@ -2,14 +2,14 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
 
+import utility.Currency;
+
 public class StatementPrinter {
 
     public String print(Invoice invoice, Map<String, Play> plays) {
         var totalAmount = 0;
         var volumeCredits = 0;
         var result = String.format("Statement for %s\n", invoice.getCustomer());
-
-        NumberFormat frmt = NumberFormat.getCurrencyInstance(Locale.US);
 
         for (var perf : invoice.getPerformances()) {
             var play = plays.get(perf.getPlayID());
@@ -39,10 +39,10 @@ public class StatementPrinter {
             if ("comedy".equals(play.getType())) volumeCredits += Math.floor(perf.getAudience() / 5);
 
             // print line for this order
-            result += String.format("  %s: %s (%s seats)\n", play.getName(), frmt.format(thisAmount / 100), perf.getAudience());
+            result += String.format("  %s: %s (%s seats)\n", play.getName(), Currency.formatAmount(thisAmount / 100), perf.getAudience());
             totalAmount += thisAmount;
         }
-        result += String.format("Amount owed is %s\n", frmt.format(totalAmount / 100));
+        result += String.format("Amount owed is %s\n", Currency.formatAmount(totalAmount / 100));
         result += String.format("You earned %s credits\n", volumeCredits);
         return result;
     }
