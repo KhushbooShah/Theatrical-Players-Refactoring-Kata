@@ -30,10 +30,7 @@ public class StatementPrinter {
                     throw new Error("unknown type: ${play.type}");
             }
 
-            // add volume credits
-            volumeCredits += Math.max(perf.getAudience() - 30, 0);
-            // add extra credit for every ten comedy attendees
-            if ("comedy".equals(play.getType())) volumeCredits += Math.floor(perf.getAudience() / 5);
+            volumeCredits = calculateVolumeCredits(volumeCredits, perf, play);
 
             // print line for this order
             result += String.format("  %s: %s (%s seats)\n", play.getName(), Currency.formatAmount(thisAmount / 100), perf.getAudience());
@@ -42,6 +39,14 @@ public class StatementPrinter {
         result += String.format("Amount owed is %s\n", Currency.formatAmount(totalAmount / 100));
         result += String.format("You earned %s credits\n", volumeCredits);
         return result;
+    }
+
+    private int calculateVolumeCredits(int volumeCredits, Performance perf, Play play) {
+        // add volume credits
+        volumeCredits += Math.max(perf.getAudience() - 30, 0);
+        // add extra credit for every ten comedy attendees
+        if ("comedy".equals(play.getType())) volumeCredits += Math.floor(perf.getAudience() / 5);
+        return volumeCredits;
     }
 
 }
