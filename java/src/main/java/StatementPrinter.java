@@ -1,7 +1,4 @@
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.Map;
-
 import utility.Currency;
 
 public class StatementPrinter {
