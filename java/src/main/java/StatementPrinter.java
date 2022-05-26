@@ -3,6 +3,8 @@ import utility.Currency;
 
 public class StatementPrinter {
 
+    PlayType playType;
+
     public String print(Invoice invoice, Map<String, Play> plays) {
         var totalAmount = 0;
         var volumeCredits = 0;
@@ -28,17 +30,12 @@ public class StatementPrinter {
     private int calculateAmountBasedOnPlayType(Performance perf, Play play, int thisAmount) throws Error {
         switch (play.getType()) {
             case "tragedy":
-                thisAmount = 40000;
-                if (perf.getAudience() > 30) {
-                    thisAmount += 1000 * (perf.getAudience() - 30);
-                }
+                playType = new TragedyPlay();
+                thisAmount += playType.calculateAmount(perf.getAudience());
                 break;
             case "comedy":
-                thisAmount = 30000;
-                if (perf.getAudience() > 20) {
-                    thisAmount += 10000 + 500 * (perf.getAudience() - 20);
-                }
-                thisAmount += 300 * perf.getAudience();
+                playType = new ComedyPlay();
+                thisAmount += playType.calculateAmount(perf.getAudience());
                 break;
             default:
                 throw new Error("unknown type: "+play.getType());
