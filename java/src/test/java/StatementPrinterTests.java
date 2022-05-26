@@ -11,7 +11,7 @@ public class StatementPrinterTests {
     @Test
     void testKnownPlayTypeStatement() {
         Map<String, Play> plays = Map.of(
-                "hamlet",  new Play("Hamlet", "tragedy"),
+                "hamlet", new Play("Hamlet", "tragedy"),
                 "as-like", new Play("As You Like It", "comedy"),
                 "othello", new Play("Othello", "tragedy"));
 
@@ -27,9 +27,9 @@ public class StatementPrinterTests {
     }
 
     @Test
-    void testNewPlayTypeStatement() {
+    void testNewPlayTypeError() {
         Map<String, Play> plays = Map.of(
-                "henry-v",  new Play("Henry V", "history"),
+                "henry-v", new Play("Henry V", "history"),
                 "as-like", new Play("As You Like It", "pastoral"));
 
         Invoice invoice = new Invoice("BigCo", List.of(
@@ -40,5 +40,22 @@ public class StatementPrinterTests {
         Assertions.assertThrows(Error.class, () -> {
             statementPrinter.print(invoice, plays);
         });
+    }
+
+    @Test
+    void testNewPlayTypeErrorMessage() {
+        Map<String, Play> plays = Map.of(
+                "henry-v", new Play("Henry V", "history"),
+                "as-like", new Play("As You Like It", "pastoral"));
+
+        Invoice invoice = new Invoice("BigCo", List.of(
+                new Performance("henry-v", 53),
+                new Performance("as-like", 55)));
+
+        StatementPrinter statementPrinter = new StatementPrinter();
+        Error err = Assertions.assertThrows(Error.class, () -> {
+            statementPrinter.print(invoice, plays);
+        });
+        Assertions.assertEquals("unknown type: history", err.getMessage());
     }
 }
