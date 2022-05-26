@@ -27,7 +27,7 @@ public class StatementPrinter {
                     thisAmount += 300 * perf.getAudience();
                     break;
                 default:
-                    throw new Error("unknown type: ${play.type}");
+                    throw new Error("unknown type: "+play.getType());
             }
 
             volumeCredits = calculateVolumeCredits(volumeCredits, perf, play);
