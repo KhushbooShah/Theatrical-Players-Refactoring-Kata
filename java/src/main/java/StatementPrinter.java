@@ -12,15 +12,15 @@ public class StatementPrinter {
 
         for (Performance perf : invoice.getPerformances()) {
             Play play = plays.get(perf.getPlayID());
-            Long amount = 0L;
+            Long performanceAmount = 0L;
 
-            amount = calculateAmountBasedOnPlayType(perf, play, amount);
+            performanceAmount = calculateAmountBasedOnPlayType(perf, play, performanceAmount);
 
             volumeCredits = calculateVolumeCredits(volumeCredits, perf, play);
 
             // print line for this order
-            result += String.format("  %s: %s (%s seats)\n", play.getName(), Currency.formatAmount(amount / 100), perf.getAudience());
-            totalAmount += amount;
+            result += String.format("  %s: %s (%s seats)\n", play.getName(), Currency.formatAmount(performanceAmount / 100), perf.getAudience());
+            totalAmount += performanceAmount;
         }
         result += String.format("Amount owed is %s\n", Currency.formatAmount(totalAmount / 100));
         result += String.format("You earned %s credits\n", volumeCredits);
