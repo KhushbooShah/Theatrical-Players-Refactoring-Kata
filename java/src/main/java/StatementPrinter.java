@@ -12,7 +12,7 @@ public class StatementPrinter {
 
         for (Performance perf : invoice.getPerformances()) {
             Play play = plays.get(perf.getPlayID());
-            var thisAmount = 0;
+            Long thisAmount = 0L;
 
             thisAmount = calculateAmountBasedOnPlayType(perf, play, thisAmount);
 
@@ -27,7 +27,7 @@ public class StatementPrinter {
         return result;
     }
 
-    private int calculateAmountBasedOnPlayType(Performance perf, Play play, int thisAmount) throws Error {
+    private Long calculateAmountBasedOnPlayType(Performance perf, Play play, Long thisAmount) throws Error {
         switch (play.getType()) {
             case "tragedy":
                 playType = new TragedyPlay();
