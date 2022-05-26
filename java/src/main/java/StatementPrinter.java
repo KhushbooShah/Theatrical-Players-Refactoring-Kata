@@ -11,7 +11,7 @@ public class StatementPrinter {
         var result = String.format("Statement for %s\n", invoice.getCustomer());
 
         for (Performance perf : invoice.getPerformances()) {
-            var play = plays.get(perf.getPlayID());
+            Play play = plays.get(perf.getPlayID());
             var thisAmount = 0;
 
             thisAmount = calculateAmountBasedOnPlayType(perf, play, thisAmount);
