@@ -8,7 +8,7 @@ public class StatementPrinter {
     public String print(Invoice invoice, Map<String, Play> plays) {
         var totalAmount = 0;
         var volumeCredits = 0;
-        var result = String.format("Statement for %s\n", invoice.getCustomer());
+        String result = String.format("Statement for %s\n", invoice.getCustomer());
 
         for (Performance perf : invoice.getPerformances()) {
             Play play = plays.get(perf.getPlayID());
