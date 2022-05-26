@@ -9,7 +9,7 @@ import static org.approvaltests.Approvals.verify;
 public class StatementPrinterTests {
 
     @Test
-    void exampleStatement() {
+    void testKnownPlayTypeStatement() {
         Map<String, Play> plays = Map.of(
                 "hamlet",  new Play("Hamlet", "tragedy"),
                 "as-like", new Play("As You Like It", "comedy"),
@@ -27,7 +27,7 @@ public class StatementPrinterTests {
     }
 
     @Test
-    void statementWithNewPlayTypes() {
+    void testNewPlayTypeStatement() {
         Map<String, Play> plays = Map.of(
                 "henry-v",  new Play("Henry V", "history"),
                 "as-like", new Play("As You Like It", "pastoral"));
