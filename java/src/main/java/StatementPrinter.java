@@ -46,12 +46,14 @@ public class StatementPrinter {
     private int calculateVolumeCredits(int volumeCredits, Performance perf, Play play) {
         // add volume credits
         volumeCredits += Math.max(perf.getAudience() - 30, 0);
-        return calculateExtraVolumeCredits(volumeCredits, perf, play);
+        if (isPlayEligibleForExtraVolumeCredit(play))
+            return calculateExtraVolumeCredits(volumeCredits, perf, play);
+        return volumeCredits;
     }
 
     private int calculateExtraVolumeCredits(int volumeCredits, Performance perf, Play play) {
         // add extra credit for every ten comedy attendees
-        if (isPlayEligibleForExtraVolumeCredit(play)) volumeCredits += Math.floor(perf.getAudience() / 5);
+        volumeCredits += Math.floor(perf.getAudience() / 5);
         return volumeCredits;
     }
 
