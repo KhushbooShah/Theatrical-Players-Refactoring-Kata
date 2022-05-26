@@ -6,7 +6,7 @@ public class StatementPrinter {
     PlayType playType;
 
     public String print(Invoice invoice, Map<String, Play> plays) {
-        var totalAmount = 0;
+        Long totalAmount = 0L;
         int volumeCredits = 0;
         String result = String.format("Statement for %s\n", invoice.getCustomer());
 
