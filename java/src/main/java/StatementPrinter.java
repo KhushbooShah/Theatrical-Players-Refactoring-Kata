@@ -4,9 +4,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import calculations.VolumeCredits;
+import entities.Customer;
 import entities.Invoice;
 import entities.Performance;
 import entities.Play;
+import entities.PlayPrintLine;
 import utility.Currency;
 
 public class StatementPrinter {
