@@ -74,20 +74,20 @@ public class StatementPrinter {
 
     private String generateStatement(Customer customer) {
         String statement = String.format("Statement for %s\n", customer.getCustomerName())
-        .concat(generatePlayOrderStatement(customer.getPlayOrders()))
-        .concat(String.format("Amount owed is %s\n", Currency.formatAmount(customer.getAmountOwed() / DIVISION_CONSTANT)))
+        .concat(generatePlayOrderStatement(customer))
+        .concat(String.format("Amount owed is %s\n", Currency.formatAmount(customer.getAmountOwed() / DIVISION_CONSTANT, customer.getCustomerLocale())))
         .concat(String.format("You earned %s credits\n", customer.getCreditsEarned()));
         return statement;
     }
 
-    private String generatePlayOrderStatement(List<PlayPrintLine> playPrintLines) {
+    private String generatePlayOrderStatement(Customer customer) {
         // print line for each order
         String playOrder = "";
-        for (PlayPrintLine playPrintLine: playPrintLines) {
+        for (PlayPrintLine playPrintLine: customer.getPlayOrders()) {
             playOrder += String.format(
                 "  %s: %s (%s seats)\n", 
                 playPrintLine.getPlayName(),
-                Currency.formatAmount(playPrintLine.getPerformanceAmount() / DIVISION_CONSTANT),
+                Currency.formatAmount(playPrintLine.getPerformanceAmount() / DIVISION_CONSTANT, customer.getCustomerLocale()),
                 playPrintLine.getNoOfSeats()
                 );
         }
