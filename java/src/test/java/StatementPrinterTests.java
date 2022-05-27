@@ -1,6 +1,10 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import entities.Invoice;
+import entities.Performance;
+import entities.Play;
+
 import java.util.List;
 import java.util.Map;
 
