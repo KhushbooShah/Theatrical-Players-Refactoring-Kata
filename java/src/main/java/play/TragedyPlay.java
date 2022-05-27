@@ -1,37 +1,37 @@
-public class ComedyPlay extends PlayType{
+package play;
+public class TragedyPlay extends PlayType {
 
     @Override
     public int getBaseAmount() {
-        return 30000;
+        return 40000;
     }
 
     @Override
     public int getMinimumAudienceCount() {
-        return 20;
+        return 30;
     }
 
     @Override
     public int getWeight() {
-        return 500;
+        return 1000;
     }
 
     @Override
     public int getAdujstement() {
-        return 10000;
+        return 0;
     }
 
     @Override
     public int getAudienceMultiplier() {
-        return 300;
+        return 0;
     }
 
     @Override
     public long calculateAmount(int audienceCount) {
         long thisAmount = getBaseAmount();
         if (audienceCount > getMinimumAudienceCount()) {
-            thisAmount += getAdujstement() + getWeight() * (audienceCount - getMinimumAudienceCount());
+            thisAmount += getWeight() * (audienceCount - getMinimumAudienceCount());
         }
-        thisAmount += getAudienceMultiplier() * audienceCount;
         return thisAmount;
     }
     

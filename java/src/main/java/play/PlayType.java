@@ -1,3 +1,4 @@
+package play;
 public abstract class PlayType {
     abstract public int getBaseAmount();
     abstract public int getMinimumAudienceCount();
