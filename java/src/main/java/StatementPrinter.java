@@ -14,12 +14,10 @@ import helper.VolumeCredits;
 
 public class StatementPrinter {
 
-    Customer customer;
-
     public String print(Invoice invoice, Map<String, Play> plays) {
         Long totalAmount = 0L;
         int volumeCredits = 0;
-        customer = new Customer();
+        Customer customer = new Customer();
         customer.setCustomerLocale(Locale.US);
         customer.setCustomerName(invoice.getCustomer());
 
