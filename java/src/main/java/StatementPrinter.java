@@ -8,12 +8,13 @@ import entities.Invoice;
 import entities.Performance;
 import entities.Play;
 import entities.PlayPrintLine;
+import helper.AmountCalculation;
 import helper.VolumeCredits;
 import utility.Currency;
 
 public class StatementPrinter {
 
-    PlayType playType;
+    
     Customer customer;
 
     public static final int DIVISION_CONSTANT = 100;
@@ -30,7 +31,7 @@ public class StatementPrinter {
             Play play = plays.get(perf.getPlayID());
             Long performanceAmount = 0L;
             
-            performanceAmount = calculateAmountBasedOnPlayType(perf, play, performanceAmount);
+            performanceAmount = AmountCalculation.calculateAmountBasedOnPlayType(perf, play, performanceAmount);
             volumeCredits = VolumeCredits.calculateVolumeCredits(volumeCredits, perf, play);
             playPrintLineList.add(new PlayPrintLine(play.getName(), performanceAmount, perf.getAudience()));
             totalAmount += performanceAmount;
@@ -40,31 +41,6 @@ public class StatementPrinter {
         customer.setCreditsEarned(volumeCredits);
         return generateStatement(customer);
     }
-
-    /**
-     * Calculates price for any play type
-     * @param perf @Performance
-     * @param play @Play
-     * @param amount Long
-     * @return Long
-     * @throws Error
-     */
-    private Long calculateAmountBasedOnPlayType(Performance perf, Play play, Long amount) throws Error {
-        switch (play.getType()) {
-            case "tragedy":
-                playType = new TragedyPlay();
-                amount += playType.calculateAmount(perf.getAudience());
-                break;
-            case "comedy":
-                playType = new ComedyPlay();
-                amount += playType.calculateAmount(perf.getAudience());
-                break;
-            default:
-                throw new Error("unknown type: "+play.getType());
-        }
-        return amount;
-    }
-
     
 
     /**
