@@ -8,6 +8,8 @@ public class StatementPrinter {
 
     PlayType playType;
     Customer customer;
+    public static final int VOLUME_CREDIT_CONSTANT = 30;
+    public static final int EXTRA_VOLUME_CREDIT_CONSTANT = 5;
 
     public String print(Invoice invoice, Map<String, Play> plays) {
         Long totalAmount = 0L;
@@ -50,7 +52,7 @@ public class StatementPrinter {
 
     private int calculateVolumeCredits(int volumeCredits, Performance perf, Play play) {
         // add volume credits
-        volumeCredits += Math.max(perf.getAudience() - 30, 0);
+        volumeCredits += Math.max(perf.getAudience() - VOLUME_CREDIT_CONSTANT, 0);
         if (isPlayEligibleForExtraVolumeCredit(play))
             return calculateExtraVolumeCredits(volumeCredits, perf);
         return volumeCredits;
@@ -58,7 +60,7 @@ public class StatementPrinter {
 
     private int calculateExtraVolumeCredits(int volumeCredits, Performance perf) {
         // add extra credit for every ten comedy attendees
-        volumeCredits += Math.floor(perf.getAudience() / 5);
+        volumeCredits += Math.floor(perf.getAudience() / EXTRA_VOLUME_CREDIT_CONSTANT);
         return volumeCredits;
     }
 
