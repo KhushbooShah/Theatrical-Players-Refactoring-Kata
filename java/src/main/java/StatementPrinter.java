@@ -1,30 +1,35 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import utility.Currency;
 
 public class StatementPrinter {
 
     PlayType playType;
+    Customer customer;
 
     public String print(Invoice invoice, Map<String, Play> plays) {
         Long totalAmount = 0L;
         int volumeCredits = 0;
-        String result = String.format("Statement for %s\n", invoice.getCustomer());
+        customer = new Customer();
+        customer.setCustomerLocale(Locale.US);
+        customer.setCustomerName(invoice.getCustomer());
 
+        List<PlayPrintLine> playPrintLineList = new ArrayList<>();
         for (Performance perf : invoice.getPerformances()) {
             Play play = plays.get(perf.getPlayID());
             Long performanceAmount = 0L;
-
+            
             performanceAmount = calculateAmountBasedOnPlayType(perf, play, performanceAmount);
-
             volumeCredits = calculateVolumeCredits(volumeCredits, perf, play);
-
-            // print line for this order
-            result += String.format("  %s: %s (%s seats)\n", play.getName(), Currency.formatAmount(performanceAmount / 100), perf.getAudience());
+            playPrintLineList.add(new PlayPrintLine(play.getName(), performanceAmount, perf.getAudience()));
             totalAmount += performanceAmount;
         }
-        result += String.format("Amount owed is %s\n", Currency.formatAmount(totalAmount / 100));
-        result += String.format("You earned %s credits\n", volumeCredits);
-        return result;
+        customer.setPlayOrders(playPrintLineList);
+        customer.setAmountOwed(totalAmount);
+        customer.setCreditsEarned(volumeCredits);
+        return generateStatement(customer);
     }
 
     private Long calculateAmountBasedOnPlayType(Performance perf, Play play, Long amount) throws Error {
@@ -62,5 +67,27 @@ public class StatementPrinter {
             return true;
         }
         return false;
+    }
+
+    private String generateStatement(Customer customer) {
+        String statement = String.format("Statement for %s\n", customer.getCustomerName())
+        .concat(generatePlayOrderStatement(customer.getPlayOrders()))
+        .concat(String.format("Amount owed is %s\n", Currency.formatAmount(customer.getAmountOwed() / 100)))
+        .concat(String.format("You earned %s credits\n", customer.getCreditsEarned()));
+        return statement;
+    }
+
+    private String generatePlayOrderStatement(List<PlayPrintLine> playPrintLines) {
+        // print line for each order
+        String playOrder = "";
+        for (PlayPrintLine playPrintLine: playPrintLines) {
+            playOrder += String.format(
+                "  %s: %s (%s seats)\n", 
+                playPrintLine.getPlayName(),
+                Currency.formatAmount(playPrintLine.getPerformanceAmount() / 100),
+                playPrintLine.getNoOfSeats()
+                );
+        }
+        return playOrder;
     }
 }
