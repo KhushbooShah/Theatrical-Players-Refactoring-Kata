@@ -10,6 +10,7 @@ public class StatementPrinter {
     Customer customer;
     public static final int VOLUME_CREDIT_CONSTANT = 30;
     public static final int EXTRA_VOLUME_CREDIT_CONSTANT = 5;
+    public static final int DIVISION_CONSTANT = 100;
 
     public String print(Invoice invoice, Map<String, Play> plays) {
         Long totalAmount = 0L;
@@ -74,7 +75,7 @@ public class StatementPrinter {
     private String generateStatement(Customer customer) {
         String statement = String.format("Statement for %s\n", customer.getCustomerName())
         .concat(generatePlayOrderStatement(customer.getPlayOrders()))
-        .concat(String.format("Amount owed is %s\n", Currency.formatAmount(customer.getAmountOwed() / 100)))
+        .concat(String.format("Amount owed is %s\n", Currency.formatAmount(customer.getAmountOwed() / DIVISION_CONSTANT)))
         .concat(String.format("You earned %s credits\n", customer.getCreditsEarned()));
         return statement;
     }
@@ -86,7 +87,7 @@ public class StatementPrinter {
             playOrder += String.format(
                 "  %s: %s (%s seats)\n", 
                 playPrintLine.getPlayName(),
-                Currency.formatAmount(playPrintLine.getPerformanceAmount() / 100),
+                Currency.formatAmount(playPrintLine.getPerformanceAmount() / DIVISION_CONSTANT),
                 playPrintLine.getNoOfSeats()
                 );
         }
