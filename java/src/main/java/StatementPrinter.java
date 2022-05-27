@@ -2,14 +2,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import calculations.VolumeCredits;
+import entities.Invoice;
+import entities.Performance;
+import entities.Play;
 import utility.Currency;
 
 public class StatementPrinter {
 
     PlayType playType;
     Customer customer;
-    public static final int VOLUME_CREDIT_CONSTANT = 30;
-    public static final int EXTRA_VOLUME_CREDIT_CONSTANT = 5;
+
     public static final int DIVISION_CONSTANT = 100;
 
     public String print(Invoice invoice, Map<String, Play> plays) {
@@ -25,7 +29,7 @@ public class StatementPrinter {
             Long performanceAmount = 0L;
             
             performanceAmount = calculateAmountBasedOnPlayType(perf, play, performanceAmount);
-            volumeCredits = calculateVolumeCredits(volumeCredits, perf, play);
+            volumeCredits = VolumeCredits.calculateVolumeCredits(volumeCredits, perf, play);
             playPrintLineList.add(new PlayPrintLine(play.getName(), performanceAmount, perf.getAudience()));
             totalAmount += performanceAmount;
         }
@@ -59,44 +63,7 @@ public class StatementPrinter {
         return amount;
     }
 
-    /**
-     * Calculates volume credits
-     * @param volumeCredits int
-     * @param perf @Performance
-     * @param play @Play
-     * @return int
-     */
-    private int calculateVolumeCredits(int volumeCredits, Performance perf, Play play) {
-        // add volume credits
-        volumeCredits += Math.max(perf.getAudience() - VOLUME_CREDIT_CONSTANT, 0);
-        if (isPlayEligibleForExtraVolumeCredit(play))
-            return calculateExtraVolumeCredits(volumeCredits, perf);
-        return volumeCredits;
-    }
-
-    /**
-     * Calculates extra volume credits based on audience count
-     * @param volumeCredits int
-     * @param perf @Performance
-     * @return int
-     */
-    private int calculateExtraVolumeCredits(int volumeCredits, Performance perf) {
-        // add extra credit for every ten comedy attendees
-        volumeCredits += Math.floor(perf.getAudience() / EXTRA_VOLUME_CREDIT_CONSTANT);
-        return volumeCredits;
-    }
-
-    /**
-     * Checks if given play is eligible for extra volume credit or not
-     * @param play @Play
-     * @return Boolean
-     */
-    private Boolean isPlayEligibleForExtraVolumeCredit(Play play) {
-        if("comedy".equals(play.getType())) {
-            return true;
-        }
-        return false;
-    }
+    
 
     /**
      * Generates full statement containing following details
